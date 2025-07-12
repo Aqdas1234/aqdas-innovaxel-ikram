@@ -54,3 +54,17 @@ class ShortURLDetailUpdateDeleteView(APIView):
         short_url = get_object_or_404(ShortURL, shortCode=shortCode)
         short_url.delete()
         return Response(status=204)
+
+
+class ShortURLStatsView(APIView):
+    def get(self, request, shortCode):
+        short_url = get_object_or_404(ShortURL, shortCode=shortCode)
+        data = {
+            "id": short_url.id,
+            "url": short_url.url,
+            "shortCode": short_url.shortCode,
+            "createdAt": short_url.createdAt,
+            "updatedAt": short_url.updatedAt,
+            "accessCount": short_url.accessCount
+        }
+        return Response(data, status=status.HTTP_200_OK)
