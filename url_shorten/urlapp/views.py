@@ -20,3 +20,12 @@ class ShortURLDetailView(RetrieveAPIView):
         short_url = get_object_or_404(ShortURL, shortCode=shortCode)
         serializer = ShortURLSerializer(short_url)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class ShortURLUpdateView(APIView):
+    def put(self, request, shortCode):
+        short_url = get_object_or_404(ShortURL, shortCode=shortCode)
+        serializer = ShortURLSerializer(short_url, data=request.data, partial=False)
+        if serializer.is_valid():
+            serializer.save() 
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
