@@ -14,7 +14,7 @@ class ShortenURLView(APIView):
             short_url = serializer.save()  
             return Response(ShortURLSerializer(short_url).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+'''
 class ShortURLDetailView(RetrieveAPIView):
     def get(self, request, shortCode):
         short_url = get_object_or_404(ShortURL, shortCode=shortCode)
@@ -31,6 +31,25 @@ class ShortURLUpdateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class ShortURLDeleteView(APIView):
+    def delete(self, request, shortCode):
+        short_url = get_object_or_404(ShortURL, shortCode=shortCode)
+        short_url.delete()
+        return Response(status=204)
+'''
+class ShortURLDetailUpdateDeleteView(APIView):
+    def get(self, request, shortCode):
+        short_url = get_object_or_404(ShortURL, shortCode=shortCode)
+        serializer = ShortURLSerializer(short_url)
+        return Response(serializer.data)
+
+    def put(self, request, shortCode):
+        short_url = get_object_or_404(ShortURL, shortCode=shortCode)
+        serializer = ShortURLSerializer(short_url, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
     def delete(self, request, shortCode):
         short_url = get_object_or_404(ShortURL, shortCode=shortCode)
         short_url.delete()
