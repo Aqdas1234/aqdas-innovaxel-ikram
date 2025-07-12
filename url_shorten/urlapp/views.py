@@ -39,6 +39,8 @@ class ShortURLDeleteView(APIView):
 class ShortURLDetailUpdateDeleteView(APIView):
     def get(self, request, shortCode):
         short_url = get_object_or_404(ShortURL, shortCode=shortCode)
+        short_url.accessCount += 1
+        short_url.save(update_fields=['accessCount']) 
         serializer = ShortURLSerializer(short_url)
         return Response(serializer.data)
 
